@@ -68,6 +68,7 @@ y = apply_to_one(lambda x: x + 4)      # equals 5
 
 assert y == 5
 
+# Author's view: just use a def instead of lambda.
 another_double = lambda x: 2 * x       # Don't do this
 
 def another_double(x):
