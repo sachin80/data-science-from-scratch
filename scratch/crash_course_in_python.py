@@ -590,12 +590,18 @@ def smallest_item(xs):
 
 # Author: OOP allows you to encapsulate data and functions that operate on them. 
 # Use a PascalCase name for the class name. 
+# Author: "magic" methods are those with double underscore at beginning and 
+# end of the method name and represent special behaviors.
+# Author: class methods names that start with a single underscore are by 
+# convention "private" and users of the class are not suppose to directly call
+# them. 
 class CountingClicker:
     """A class can/should have a docstring, just like a function"""
 
     def __init__(self, count = 0):
         self.count = count
 
+    # dunder method that produces a string representation of the class instance. 
     def __repr__(self):
         return f"CountingClicker(count={self.count})"
 
@@ -632,15 +638,22 @@ assert clicker2.read() == 1
 clicker2.reset()
 assert clicker2.read() == 1, "reset shouldn't do anything"
 
+# Author: a list of billion numbers takes up a lot of memory. We can create
+# generators, which can be iterated over just like lists but generate their
+# values lazily on demand. One way to create  generator is to use the yield
+# operator. 
 def generate_range(n):
     i = 0
     while i < n:
         yield i   # every call to yield produces a value of the generator
         i += 1
 
+# Author: the following loop will consume the yielded values one at a time until
+# none are left. In fact, 'range' is lazy and so there is not point in doing this. 
 for i in generate_range(10):
     print(f"i: {i}")
 
+# Author: you can create an infinite sequence. 
 def natural_numbers():
     """returns 1, 2, 3, ..."""
     n = 1
@@ -648,8 +661,21 @@ def natural_numbers():
         yield n
         n += 1
 
+# Author: generator comprehension as well.
 evens_below_20 = (i for i in generate_range(20) if i % 2 == 0)
+# To actually do work, you can iterate the following ways
+for val in evens_below_20: 
+    print(val)
+# Convert to list 
+list_even_below_20 = list(evens_below_20)
+# Or use "next"
+print(next(evens_below_20))
 
+# Author: flip side of laziness is that you can only iterate throught the 
+# generator once, if you want to iterate through something multiple times
+# you'll need to either re-create the generator each time or use a list. If
+# generator the values is expensive, then it might be better to use a list
+# instead. 
 # None of these computations *does* anything until we iterate
 data = natural_numbers()
 evens = (x for x in data if x % 2 == 0)
@@ -674,10 +700,14 @@ for name in names:
     print(f"name {i} is {names[i]}")
     i += 1
 
+# Author: when we want the indices and values (i, name) use enumerate.
 # Pythonic
 for i, name in enumerate(names):
     print(f"name {i} is {name}")
 
+# Author: the "random" module produces a pseudorandom (determinstic) numbers
+# based on an internal state that you can set with "random.seed" if you want
+# reproducible results. 
 import random
 random.seed(10)  # this ensures we get the same results every time
 
@@ -693,22 +723,30 @@ print(random.random())  # 0.57140259469
 random.seed(10)         # reset the seed to 10
 print(random.random())  # 0.57140259469 again
 
+# Author: return random value in range  
 random.randrange(10)    # choose randomly from range(10) = [0, 1, ..., 9]
 random.randrange(3, 6)  # choose randomly from range(3, 6) = [3, 4, 5]
 
+# Author: this will randomly reorder the elements of a list. 
 up_to_ten = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 random.shuffle(up_to_ten)
 print(up_to_ten)
 # [7, 2, 6, 8, 9, 4, 10, 1, 3, 5]   (your results will probably be different)
 
+# Author: randomly pick one element from a list. 
 my_best_friend = random.choice(["Alice", "Bob", "Charlie"])     # "Bob" for me
 
+# Author: to sample without replacement (no duplicates) 
 lottery_numbers = range(60)
-winning_numbers = random.sample(lottery_numbers, 6)  # [16, 36, 10, 6, 25, 9]
+winning_numbers = random.sample(lottery_numbers, 6)  # [41, 51, 10, 2, 33, 31
 
+# Author: to sample with replacement, just make multiple calls to "random.choice"
 four_with_replacement = [random.choice(range(10)) for _ in range(4)]
-print(four_with_replacement)  # [9, 4, 4, 2]
+print(four_with_replacement)  # [5, 1, 3, 5]
 
+# Author: regular expression are important but complicated. Note that "re.match"
+# checks whether the beginning of a string matches a regular expression while 
+# "re.search" checks whether any part of a string matches a regular expression. 
 import re
 
 re_examples = [                        # all of these are true, because
@@ -721,6 +759,9 @@ re_examples = [                        # all of these are true, because
 
 assert all(re_examples), "all the regex examples should be True"
 
+# Author: "zip" function transforms multiple iterables into a single iterable
+# of tuples 
+
 list1 = ['a', 'b', 'c']
 list2 = [1, 2, 3]
 
@@ -730,11 +771,13 @@ list2 = [1, 2, 3]
 
 assert [pair for pair in zip(list1, list2)] == [('a', 1), ('b', 2), ('c', 3)]
 
+# Author: can also "unzip" or unpack a list
 pairs = [('a', 1), ('b', 2), ('c', 3)]
 letters, numbers = zip(*pairs)
-
+# Below is the same as zip(*pairs)
 letters, numbers = zip(('a', 1), ('b', 2), ('c', 3))
 
+# Author: you can also use argument unpacking on any function. 
 def add(a, b): return a + b
 
 add(1, 2)      # returns 3
@@ -744,6 +787,8 @@ except TypeError:
     print("add expects two inputs")
 add(*[1, 2])   # returns 3
 
+# Author: we want to create a higher-order function that takes input some 
+# functon, f, and returns a new function, g. 
 def doubler(f):
     # Here we define a new function that keeps a reference to f
     def g(x):
@@ -758,7 +803,8 @@ def f1(x):
 g = doubler(f1)
 assert g(3) == 8,  "(3 + 1) * 2 should equal 8"
 assert g(-1) == 0, "(-1 + 1) * 2 should equal 0"
-
+# Author: but the higher-order function doesn't work when f takes more 
+# than a single-argument. 
 def f2(x, y):
     return x + y
 
@@ -768,6 +814,7 @@ try:
 except TypeError:
     print("as defined, g only takes one argument")
 
+# Author: need a way to specify a function that takes arbitrary arguments. 
 def magic(*args, **kwargs):
     print("unnamed args:", args)
     print("keyword args:", kwargs)
@@ -785,6 +832,9 @@ x_y_list = [1, 2]
 z_dict = {"z": 3}
 assert other_way_magic(*x_y_list, **z_dict) == 6, "1 + 2 + 3 should be 6"
 
+# Author: below code is the fix to hof. In general it's better to be explicit about what
+# sorts of arguments your functions require, use "args" and "kwargs" when you 
+# absolutely have to. 
 def doubler_correct(f):
     """works no matter what kind of inputs f expects"""
     def g(*args, **kwargs):
@@ -795,6 +845,8 @@ def doubler_correct(f):
 g = doubler_correct(f2)
 assert g(1, 2) == 6, "doubler should work now"
 
+# Author: Python is a dynamically typed language such that in general it 
+# doesn't care about the types of objects as long as we use them in valid ways
 def add(a, b):
     return a + b
 
@@ -807,12 +859,21 @@ try:
 except TypeError:
     print("cannot add an int to a string")
 
+# Author: in statically typed languages our objects and function have types. 
 def add(a: int, b: int) -> int:
     return a + b
 
 add(10, 5)           # you'd like this to be OK
 add("hi ", "there")  # you'd like this to be not OK
 
+# Author: there are 4 good reasons to use type annotation in your Python code. 
+# 1. Type are an important form of documentation, i.e. the dot_product()
+# function expects the inputs to be of type 'Vector'.
+# 2. There are external tools that will inspect the type annotations and let
+# you know type annotation errors before you run your code. 
+# 3. Having to think about the types in your code forces you to design cleaner
+# functions and interfaces. 
+# 4. Allows your editor to help you with things like autocomplete. 
 
 # This is not in the book, but it's needed
 # to make the `dot_product` stubs not error out.
@@ -828,6 +889,8 @@ from typing import Union
 
 def secretly_ugly_function(value, operation): ...
 
+# Below is a cleaner function and interface, it tells me that operation can 
+# be a str, int, ... etc. 
 def ugly_function(value: int, operation: Union[str, int, float, bool]) -> int:
     ...
 
@@ -869,6 +932,8 @@ else:
 # tuples specify a type for each element
 triple: Tuple[int, float, int] = (10, 2.3, 5)
 
+
+# Author: Python has first-class functions that we need to represent as well. 
 from typing import Callable
 
 # The type hint says that repeater is a function that takes
