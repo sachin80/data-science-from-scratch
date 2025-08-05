@@ -68,7 +68,7 @@ y = apply_to_one(lambda x: x + 4)      # equals 5
 
 assert y == 5
 
-# Author's view: just use a def instead of lambda.
+## Author's view: just use a def instead of lambda.
 another_double = lambda x: 2 * x       # Don't do this
 
 def another_double(x):
@@ -118,8 +118,11 @@ last_name = "Grus"
 full_name1 = first_name + " " + last_name             # string addition
 full_name2 = "{0} {1}".format(first_name, last_name)  # string.format
 
+## Author: Prefer to use f-strings to construct strings. 
 full_name3 = f"{first_name} {last_name}"
 
+## Author: In some languages better to stay away from exceptions but in Python it
+# sometims makes the code cleaner
 try:
     print(0 / 0)
 except ZeroDivisionError:
@@ -154,6 +157,7 @@ last_three = x[-3:]                 # [7, 8, 9]
 without_first_and_last = x[1:-1]    # [1, 2, ..., 8]
 copy_of_x = x[:]                    # [-1, 1, 2, ..., 9]
 
+# To take a stride, can be negative as well 
 every_third = x[::3]                 # [-1, 3, 6, 9]
 five_to_three = x[5:2:-1]            # [5, 4, 3]
 
@@ -161,15 +165,18 @@ five_to_three = x[5:2:-1]            # [5, 4, 3]
 assert every_third == [-1, 3, 6, 9]
 assert five_to_three == [5, 4, 3]
 
+# Author: membership check this way takes O(n). Don't use unless list is small. 
 1 in [1, 2, 3]    # True
 0 in [1, 2, 3]    # False
 
+# Author: this modifies the original list in-place. 
 x = [1, 2, 3]
 x.extend([4, 5, 6])     # x is now [1, 2, 3, 4, 5, 6]
 
 
 assert x == [1, 2, 3, 4, 5, 6]
 
+# Author: this doesn't modify the original list. 
 x = [1, 2, 3]
 y = x + [4, 5, 6]       # y is [1, 2, 3, 4, 5, 6]; x is unchanged
 
@@ -177,6 +184,7 @@ y = x + [4, 5, 6]       # y is [1, 2, 3, 4, 5, 6]; x is unchanged
 assert x == [1, 2, 3]
 assert y == [1, 2, 3, 4, 5, 6]
 
+# Author: can append to a list one at a time. 
 x = [1, 2, 3]
 x.append(0)      # x is now [1, 2, 3, 0]
 y = x[-1]        # equals 0
@@ -187,16 +195,22 @@ assert x == [1, 2, 3, 0]
 assert y == 0
 assert z == 4
 
+# Author: can unpack a list. 
 x, y = [1, 2]    # now x is 1, y is 2
 
 
 assert x == 1
 assert y == 2
 
+# Author: idiom, use "_" when unpacking for value you don't care about. 
 _, y = [1, 2]    # now y == 2, didn't care about the first element
 
+## Author: tuples are list-like but immutable, 
+# same operations list but can't modify. 
 my_list = [1, 2]
+# this is a tuple 
 my_tuple = (1, 2)
+# this is also a tuple 
 other_tuple = 3, 4
 my_list[1] = 3      # my_list is now [1, 3]
 
@@ -205,12 +219,14 @@ try:
 except TypeError:
     print("cannot modify a tuple")
 
+# Author: tuples are convenient way to return multiple values from functions. 
 def sum_and_product(x, y):
     return (x + y), (x * y)
 
 sp = sum_and_product(2, 3)     # sp is (5, 6)
 s, p = sum_and_product(5, 10)  # s is 15, p is 50
 
+# Author: tuples can also be used for multiple assignment. 
 x, y = 1, 2     # now x is 1, y is 2
 x, y = y, x     # Pythonic way to swap variables; now x is 2, y is 1
 
@@ -218,6 +234,8 @@ x, y = y, x     # Pythonic way to swap variables; now x is 2, y is 1
 assert x == 2
 assert y == 1
 
+## Author: fundamental data type is the dictionary, allows a value corresponding 
+# to a given key. 
 empty_dict = {}                     # Pythonic
 empty_dict2 = dict()                # less Pythonic
 grades = {"Joel": 80, "Tim": 95}    # dictionary literal
@@ -232,6 +250,7 @@ try:
 except KeyError:
     print("no grade for Kate!")
 
+# Author: can check for the membership of a key in O(1). 
 joel_has_grade = "Joel" in grades     # True
 kate_has_grade = "Kate" in grades     # False
 
@@ -239,6 +258,7 @@ kate_has_grade = "Kate" in grades     # False
 assert joel_has_grade
 assert not kate_has_grade
 
+# Author: get() method, will return default value instead of raising exception. 
 joels_grade = grades.get("Joel", 0)   # equals 80
 kates_grade = grades.get("Kate", 0)   # equals 0
 no_ones_grade = grades.get("No One")  # default default is None
@@ -248,6 +268,7 @@ assert joels_grade == 80
 assert kates_grade == 0
 assert no_ones_grade is None
 
+# Author: can assign key/value pairs using the same square brackets. 
 grades["Tim"] = 99                    # replaces the old value
 grades["Kate"] = 100                  # adds a third entry
 num_students = len(grades)            # equals 3
@@ -255,6 +276,7 @@ num_students = len(grades)            # equals 3
 
 assert num_students == 3
 
+# Author: can use dictionaries for structured data. There is a better approach.
 tweet = {
     "user" : "joelgrus",
     "text" : "Data Science is Awesome",
@@ -262,6 +284,7 @@ tweet = {
     "hashtags" : ["#data", "#science", "#datascience", "#awesome", "#yolo"]
 }
 
+# Authors: all of these dictionary methods return iterables. 
 tweet_keys   = tweet.keys()     # iterable for the keys
 tweet_values = tweet.values()   # iterable for the values
 tweet_items  = tweet.items()    # iterable for the (key, value) tuples
@@ -275,9 +298,11 @@ assert "user" in tweet_keys
 assert "user" in tweet
 assert "joelgrus" in tweet_values
 
-
+## Author: use case for defaultdict, when you try to look up a key it doesn't
+# contain, it first adds a value for using a zero-argument function you provide. 
 document = ["data", "science", "from", "scratch"]
 
+# Increment if already in dictionary and add it to dictionary if not. 
 word_counts = {}
 for word in document:
     if word in word_counts:
@@ -285,6 +310,7 @@ for word in document:
     else:
         word_counts[word] = 1
 
+# Handle the exception instead
 word_counts = {}
 for word in document:
     try:
@@ -292,11 +318,14 @@ for word in document:
     except KeyError:
         word_counts[word] = 1
 
+# Use get() method to return default value instead of raise exception. 
 word_counts = {}
 for word in document:
     previous_count = word_counts.get(word, 0)
     word_counts[word] = previous_count + 1
 
+# Best to use defaultdict(), which adds a value based on zero-arg functoin 
+# for missing key
 from collections import defaultdict
 
 word_counts = defaultdict(int)          # int() produces 0
@@ -308,9 +337,34 @@ dd_list[2].append(1)                    # now dd_list contains {2: [1]}
 
 dd_dict = defaultdict(dict)             # dict() produces an empty dict
 dd_dict["Joel"]["City"] = "Seattle"     # {"Joel" : {"City": Seattle"}}
+# Safe way to return Joel's city, if not, then returns None. 
+dd_dict.get("Joel", {}).get("City")     
 
 dd_pair = defaultdict(lambda: [0, 0])
 dd_pair[2][1] = 1                       # now dd_pair contains {2: [0, 1]}
+dd_pair[2][2] = 2                       # "out of range" error
+
+# How is the above lambda function different than: 
+dd_list = defaultdict(list)
+dd_list[2][0] = 0
+dd_list[2][1] = 1
+
+# defaultdict(list) gives an empty list [] for each missing key
+# defaultdict(lambda: [0, 0]) gives a fixed-size [0, 0] 
+# the argument to defaultdict must be a callable (constructor) 
+
+# you can append to either, but index assignment fails if index 
+# doesn't exist
+dd_pair[2].append(3)                # Now dd_pair[2] == [0, 0, 3]
+
+template = [0, 0]
+dd_pair_bad = defaultdict(lambda: template)
+dd_pair_bad[1]
+dd_pair_bad[2]                     # dd_pair_bad is {1: [0, 0], 2: [0, 0]}
+dd_pair_bad[1][0] = 5              # dd_pair_bad is {1: [5, 0], 2: [5, 0]}
+# lambda: template returns the same list object every time (shared reference)
+# so all keys point to the same list — modifying one affects others 
+# use lambda: [0, 0] instead to return a fresh copy each time
 
 from collections import Counter
 c = Counter([0, 1, 2, 0])          # c is (basically) {0: 2, 1: 1, 2: 1}
@@ -324,7 +378,8 @@ for word, count in word_counts.most_common(10):
 
 primes_below_10 = {2, 3, 5, 7}
 
-s = set()
+# Author: represents a collection of distinct elements. 
+s = set()      # # can't use {} for empty set since it's reserved for dict
 s.add(1)       # s is now {1}
 s.add(2)       # s is now {1, 2}
 s.add(2)       # s is still {1, 2}
@@ -332,16 +387,20 @@ x = len(s)     # equals 2
 y = 2 in s     # equals True
 z = 3 in s     # equals False
 
-
+# Author: first reason to use set() is 'in' is a very fast operation on sets.
+# If we have a large collection of items that we want to use for membership, 
+# a set is more appropiate than a list. 
 hundreds_of_other_words = []  # required for the below code to run
 
 stopwords_list = ["a", "an", "at"] + hundreds_of_other_words + ["yet", "you"]
 
 "zip" in stopwords_list     # False, but have to check every element
 
+# first convert the list into a set 
 stopwords_set = set(stopwords_list)
 "zip" in stopwords_set      # very fast to check
 
+# Author: second reason to use list is find the distinct items in a collection
 item_list = [1, 2, 3, 1, 2, 3]
 num_items = len(item_list)                # 6
 item_set = set(item_list)                 # {1, 2, 3}
@@ -354,6 +413,7 @@ assert item_set == {1, 2, 3}
 assert num_distinct_items == 3
 assert distinct_item_list == [1, 2, 3]
 
+# TODO:
 if 1 > 2:
     message = "if only 1 were greater than two..."
 elif 1 > 3:
@@ -361,6 +421,7 @@ elif 1 > 3:
 else:
     message = "when all else fails use else (if you want to)"
 
+# Author: this is the one-line ternary operation 
 parity = "even" if x % 2 == 0 else "odd"
 
 x = 0
@@ -379,6 +440,7 @@ for x in range(10):
         break     # quit the loop entirely
     print(x)
 
+# Author: Booleans are similar to other languages except they're capitalized. 
 one_is_less_than_two = 1 < 2          # equals True
 true_equals_false = True == False     # equals False
 
@@ -386,11 +448,13 @@ true_equals_false = True == False     # equals False
 assert one_is_less_than_two
 assert not true_equals_false
 
+# Author: None means non-existent value, it's similar to 'null' in other languages. 
 x = None
 assert x == None, "this is the not the Pythonic way to check for None"
 assert x is None, "this is the Pythonic way to check for None"
 
-
+# Author: anything other than "False, None, [], {}, '', set(), 0, 0.0" get treated
+# as True. Can cause tricky bugs if you're not expecting this. 
 def some_function_that_returns_a_string():
     return ""
 
@@ -400,30 +464,78 @@ if s:
 else:
     first_char = ""
 
+# Author: a more confusing way to do above is, will return the second value 
+# when the first value is 'truthy', and first value when not.
 first_char = s and s[0]
 
+# Author: similarily if x is either a number of possibly "None"
 safe_x = x or 0
+ 
+x = 10 
+# This will evaluate to 0 are we know.
+x and 0 
 
+x = None 
+# But this will evaluate to None because of short-circuit. 
+x and 0 
+
+# "and" returns the first falsy value or the last if all are truthy. 
+None and 0   # None
+1 and 0      # 0
+1 and 5      # 5
+
+# "or" returns the first truthy value or the last if all are falsy. 
+None or 0    # 0
+0 or 5       # 5
+'' or 'hi'   # 'hi'
+
+# Author: This is possibly more readable. 
 safe_x = x if x is not None else 0
 
+# Also, somethimes you want to gracefully fail i.e. 
+input = form.get("age")
+age = 0 if not input else int(input)    # avoids crash when input is empty string
+
+def inverse(x):
+    return 0 if not x else 1 / x        # returns 0 instead of 'ZeroDivisionError'
+
+# Author: return True when every element is truthy
 all([True, 1, {3}])   # True, all are truthy
 all([True, 1, {}])    # False, {} is falsy
+# Author: return True when atleast one element is truthy 
 any([True, 1, {}])    # True, True is truthy
-all([])               # True, no falsy elements in the list
 any([])               # False, no truthy elements in the list
 
+# Why is this True? 
+all([])               # True, no falsy elements in the list
+# This tells us there are zero elements, and therefore zero falsy elements  
+# so by definition, all elements are true.
+# That is different in Boolean contexts:  
+bool([])              # False 
+
+# Author: sort() will sort in-place, and sorted(x) returns a new list. 
 x = [4, 1, 2, 3]
 y = sorted(x)     # y is [1, 2, 3, 4], x is unchanged
 x.sort()          # now x is [1, 2, 3, 4]
 
+# Author: specifying reverse=True parameter and can specify key to compare the
+# results of a function. 
 # sort the list by absolute value from largest to smallest
 x = sorted([-4, 1, -2, 3], key=abs, reverse=True)  # is [-4, 3, -2, 1]
 
-# sort the words and counts from highest count to lowest
+# We want to sort the words and counts from highest count to lowest
+sorted(word_counts)         # only gives use the keys sorted
+# But if we pass word_counts.items() each element passed is a tuple 
+# and the lambda gets that tuple as word_and_count, which returns 
+# word_and_count[1].
 wc = sorted(word_counts.items(),
             key=lambda word_and_count: word_and_count[1],
             reverse=True)
+# Above code is similar to: 
+for word_and_count in word_counts.items():
+    print(word_and_count, '→', word_and_count[1])
 
+# Author: the Pythonic way to transform a list into another list. 
 even_numbers = [x for x in range(5) if x % 2 == 0]  # [0, 2, 4]
 squares      = [x * x for x in range(5)]            # [0, 1, 4, 9, 16]
 even_squares = [x * x for x in even_numbers]        # [0, 4, 16]
@@ -433,6 +545,7 @@ assert even_numbers == [0, 2, 4]
 assert squares == [0, 1, 4, 9, 16]
 assert even_squares == [0, 4, 16]
 
+# Author: comprehensions can be done for dicts and sets. 
 square_dict = {x: x * x for x in range(5)}  # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
 square_set  = {x * x for x in [1, -1]}      # {1}
 
@@ -440,6 +553,7 @@ square_set  = {x * x for x in [1, -1]}      # {1}
 assert square_dict == {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
 assert square_set == {1}
 
+# Author: if you don't need the values for the list, then it's commone to use _
 zeros = [0 for _ in even_numbers]      # has the same length as even_numbers
 
 
@@ -456,7 +570,8 @@ increasing_pairs = [(x, y)                       # only pairs with x < y,
                     for x in range(10)           # range(lo, hi) equals
                     for y in range(x + 1, 10)]   # [lo, lo + 1, ..., hi - 1]
 
-
+# Author: automated testing using assert, assert your function is correct
+# use liberally throughout your code. 
 assert len(increasing_pairs) == 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1
 assert all(x < y for x, y in increasing_pairs)
 
@@ -473,6 +588,8 @@ def smallest_item(xs):
     assert xs, "empty list has no smallest item"
     return min(xs)
 
+# Author: OOP allows you to encapsulate data and functions that operate on them. 
+# Use a PascalCase name for the class name. 
 class CountingClicker:
     """A class can/should have a docstring, just like a function"""
 
