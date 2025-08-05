@@ -17,6 +17,8 @@ plt.ylabel("Billions of $")
 plt.savefig('im/viz_gdp.png')
 plt.gca().clear()
 
+# Author: bar charts are a good choice when you want to show how some 
+# quantity varies among some discrete set of items. 
 movies = ["Annie Hall", "Ben-Hur", "Casablanca", "Gandhi", "West Side Story"]
 num_oscars = [5, 11, 3, 8, 10]
 
@@ -41,7 +43,7 @@ grades = [83, 95, 91, 87, 70, 0, 85, 82, 100, 67, 73, 77, 0]
 # Bucket grades by decile, but put 100 in with the 90s
 histogram = Counter(min(grade // 10 * 10, 90) for grade in grades)
 
-plt.bar([x + 5 for x in histogram.keys()],  # Shift bars right by 5
+plt.bar([x + 5 for x in histogram.keys()],  # Shift bars right by 5, so centers of bars at 5, 15, 25, etc. 
         histogram.values(),                 # Give each bar its correct height
         10,                                 # Give each bar a width of 8
         edgecolor=(0, 0, 0))                # Black edges for each bar
@@ -59,6 +61,8 @@ plt.title("Distribution of Exam 1 Grades")
 plt.savefig('im/viz_grades.png')
 plt.gca().clear()
 
+# Author: be judicious when using plt.axis, when creating bar plots, it's 
+# bad if your axis doesn't start at 0 since this is a way to mislead people. 
 mentions = [500, 505]
 years = [2017, 2018]
 
@@ -93,6 +97,7 @@ plt.title("Not So Huge Anymore")
 plt.savefig('im/viz_non_misleading_y_axis.png')
 plt.gca().clear()
 
+# Author: line charts are good for showing trends. 
 variance     = [1, 2, 4, 8, 16, 32, 64, 128, 256]
 bias_squared = [256, 128, 64, 32, 16, 8, 4, 2, 1]
 total_error  = [x + y for x, y in zip(variance, bias_squared)]
@@ -108,7 +113,7 @@ plt.plot(xs, total_error,  'b:',  label='total error') # blue dotted line
 # we can get a legend for free (loc=9 means "top center")
 plt.legend(loc=9)
 plt.xlabel("model complexity")
-plt.xticks([])
+plt.xticks([])                                          # no x-tick marks
 plt.title("The Bias-Variance Tradeoff")
 # plt.show()
 
@@ -116,6 +121,9 @@ plt.title("The Bias-Variance Tradeoff")
 plt.savefig('im/viz_line_chart.png')
 plt.gca().clear()
 
+
+# Author: scatterplots are good for visualizing the relationships between 
+# paired sets of data. 
 friends = [ 70,  65,  72,  63,  71,  64,  60,  64,  67]
 minutes = [175, 170, 205, 120, 220, 130, 105, 145, 190]
 labels =  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
@@ -138,6 +146,9 @@ plt.ylabel("daily minutes spent on the site")
 plt.savefig('im/viz_scatterplot.png')
 plt.gca().clear()
 
+
+# Author: if you're scattering comparable variables you might get misleading
+# picture if you let matplotlib choose the axes. 
 test_1_grades = [ 99, 90, 85, 97, 80]
 test_2_grades = [100, 85, 60, 90, 70]
 
@@ -151,7 +162,8 @@ plt.ylabel("test 2 grade")
 plt.savefig('im/viz_scatterplot_axes_not_comparable.png')
 plt.gca().clear()
 
-
+# Author: if we include a call to plt.axis("equal") the plot 
+# more accurately shows that most of the variation occurs on test 2. 
 test_1_grades = [ 99, 90, 85, 97, 80]
 test_2_grades = [100, 85, 60, 90, 70]
 plt.scatter(test_1_grades, test_2_grades)
